@@ -76,12 +76,12 @@ A wearable BCI system that decodes neural signals into spoken words, designed fo
 | Component | Model | Purpose | Cost (USD) |
 |-----------|-------|---------|------------|
 | Compute | [Seeed reComputer J4012](https://www.seeedstudio.com/reComputer-J4012-p-5586.html) | Jetson Orin NX 16GB, 100 TOPS | $899 |
-| Amplifier | 4x ADS1299 8-ch Boards | 32-ch EEG, 24-bit ADC, SPI | $1,200-1,800 |
-| Sensors | [OpenBCI Gelfree Cap](https://shop.openbci.com/products/gelfree-bci-cap-kit) | 35-electrode saline cap | $999 |
+| Amplifier | [4x JNEEG Shields](https://pieeg.com/jneeg/) | 32-ch EEG, ADS1299, SPI | $1,400 |
+| Sensors | [Greentek Gelfree-S3](https://www.greenteksensor.com/products/eeg-caps/gt-cap-gelfree-s3/) | 32-electrode saline cap | $700-1,200 |
 | Audio In | [DJI Mic Mini](https://store.dji.com/product/dji-mic-mini) + [iFi iDefender](https://www.amazon.com/iFi-iDefender-External-Ground-Eliminator/dp/B0849J33T9) | Ambient speech capture | $230 |
 | Power | 12V 10Ah LiFePO4 + DC-DC | Portable power supply | $130 |
 | Enclosure | 3D printed + cooling fans | Wearable housing | $50 |
-| **Total** | | | **$3,500 - $4,100** |
+| **Total** | | | **$3,400 - $3,900** |
 
 ### Alternative Options
 
@@ -90,21 +90,22 @@ A wearable BCI system that decodes neural signals into spoken words, designed fo
 - [Yahboom Orin NX Super](https://category.yahboom.net/products/jetson-orin-nx) - $850-950
 
 **EEG Amplifier:**
+- [JNEEG Shield](https://pieeg.com/jneeg/) - $350/board, stackable to 64 channels ([Elecrow](https://www.elecrow.com/store/PiEEG))
 - [OpenBCI Cyton+Daisy 16-ch](https://shop.openbci.com/products/cyton-daisy-biosensing-boards-16-channel) - $2,499 (Bluetooth, not SPI)
 - [HackEEG 32-ch Kit](https://www.crowdsupply.com/starcat/hackeeg) - ~$2,090 (when available)
-- DIY: 4x ADS1299 chips ($50 each) + custom PCB
 
 **EEG Cap:**
-- Greentek Gelfree-S3 - $500-750 (contact [greenteksensor.com](https://www.greenteksensor.com))
+- [Greentek Gelfree-S3](https://www.greenteksensor.com/products/eeg-caps/gt-cap-gelfree-s3/) - $700-1,200 (contact Bennie at greenteksensor.com)
+- [OpenBCI Gelfree Cap](https://shop.openbci.com/products/gelfree-bci-cap-kit) - $999
 - Generic wet electrode cap - $100-300
 
 ### Budget vs Quality Trade-offs
 
 | Budget | Config | Total Cost |
 |--------|--------|------------|
-| **Minimum** | Orin NX + 4x Chinese ADS1299 + Generic cap | ~$2,500 |
-| **Recommended** | reComputer + ADS1299 boards + OpenBCI cap | ~$3,800 |
-| **Premium** | reComputer + OpenBCI Cyton + Gelfree cap | ~$4,500 |
+| **Minimum** | Orin NX + 4x JNEEG + Generic cap | ~$2,700 |
+| **Recommended** | reComputer + 4x JNEEG + Greentek S3 | ~$3,500 |
+| **Premium** | reComputer + OpenBCI Cyton + Greentek S3 | ~$4,800 |
 
 ## Software Stack
 
