@@ -7,6 +7,8 @@ Real-time Brain-Computer Interface for speech synthesis. Converts EEG signals to
 ![Platform](https://img.shields.io/badge/platform-Jetson_Orin_NX-76B900.svg)
 ![Status](https://img.shields.io/badge/status-development-yellow.svg)
 
+![BCI Speech Synthesis System](docs/images/bci-speech-synthesis-product.png)
+
 ## Overview
 
 A wearable BCI system that decodes neural signals into spoken words, designed for individuals with speech impairments. The system uses high-density EEG, contextual audio awareness, and low-latency text-to-speech to enable real-time communication.
