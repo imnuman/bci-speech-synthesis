@@ -1,0 +1,75 @@
+# BCI Speech Synthesis Configuration
+# Default settings for Jetson Orin NX deployment
+
+# System
+system:
+  device: cuda
+  log_level: INFO
+  data_dir: ./data
+  models_dir: ./models
+
+# EEG Acquisition
+acquisition:
+  spi_device: /dev/spidev0.0
+  spi_speed_hz: 4000000
+  sample_rate: 1000        # Hz
+  channels: 32
+  drdy_pin: 17             # GPIO pin for data ready
+  buffer_seconds: 5        # Ring buffer size
+
+# Signal Processing
+processing:
+  notch_freq: 50           # Power line frequency (50 or 60 Hz)
+  bandpass_low: 1          # Hz
+  bandpass_high: 50        # Hz
+  artifact_threshold: 100  # uV
+  use_car: true            # Common Average Reference
+
+# Neural Decoder
+decoder:
+  model_type: tcn          # tcn or transformer
+  model_path: models/decoder.engine
+  window_size: 1000        # samples (1 second @ 1kHz)
+  hop_size: 100            # samples (100ms)
+  confidence_threshold: 0.4
+  vocab:
+    - yes
+    - no
+    - help
+    - water
+    - bathroom
+    - pain
+    - tired
+    - hungry
+    - cold
+    - hot
+
+# Context Awareness
+context:
+  enabled: true
+  stt_model: small         # whisper model size
+  stt_language: en
+  stt_device: cuda
+  context_window_sec: 10
+  boost_factor: 2.0
+  llm_enabled: false
+  llm_model_path: models/llama-3-8b-instruct.gguf
+
+# Text-to-Speech
+tts:
+  engine: kokoro           # kokoro or piper
+  model_path: models/kokoro-82m.onnx
+  voice: af_sarah
+  sample_rate: 24000
+
+# Audio Output
+audio:
+  device: default          # ALSA device
+  buffer_size: 1024
+  sample_rate: 24000
+
+# Performance
+performance:
+  target_latency_ms: 200
+  warmup_iterations: 10
+  profile: false

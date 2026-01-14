@@ -1,0 +1,107 @@
+# SPI Configuration for JNEEG 32-Channel Shield
+# Jetson Orin NX GPIO Header
+
+# SPI Bus Configuration
+spi:
+  bus: 0
+  device: 0
+  path: /dev/spidev0.0
+  mode: 1                  # CPOL=0, CPHA=1
+  bits_per_word: 8
+  max_speed_hz: 4000000    # 4 MHz
+
+# ADS1299 ADC Configuration
+ads1299:
+  num_chips: 4             # 4 chips for 32 channels
+  channels_per_chip: 8
+
+  # Sample rate (Hz) - affects CONFIG1 register
+  # Options: 250, 500, 1000, 2000, 4000, 8000, 16000
+  sample_rate: 1000
+
+  # PGA Gain - affects CHnSET registers
+  # Options: 1, 2, 4, 6, 8, 12, 24
+  gain: 24
+
+  # Input configuration
+  # normal: Normal electrode input
+  # shorted: Inputs shorted (for testing)
+  # test: Internal test signal
+  input_mode: normal
+
+  # Internal reference
+  # Enable internal 4.5V reference
+  internal_ref: true
+
+  # Bias configuration
+  bias_enabled: true
+  bias_reference: internal
+
+# GPIO Pins (Jetson Orin NX 40-pin header)
+gpio:
+  # Data Ready pin - interrupt when new data available
+  drdy: 17                 # Pin 11 (GPIO17)
+
+  # Reset pin - active low reset
+  reset: 27                # Pin 13 (GPIO27)
+
+  # Power down pin (optional)
+  pwdn: null
+
+# Conversion factors
+conversion:
+  # LSB to microvolts
+  # Formula: Vref / (2^23 - 1) / Gain * 1e6
+  # Default (Vref=4.5V, Gain=24): 22.35 nV/count
+  vref: 4.5
+  resolution_bits: 24
+  uv_per_count: 0.02235
+
+# Data format
+data:
+  # Status bytes per chip
+  status_bytes: 3
+
+  # Bytes per channel (24-bit)
+  bytes_per_channel: 3
+
+  # Total bytes per sample per chip
+  bytes_per_chip: 27       # 3 + (8 * 3)
+
+  # Total bytes per sample (all chips)
+  bytes_per_sample: 108    # 27 * 4
+
+# Electrode mapping (10-20 system)
+channels:
+  0: Fp1
+  1: Fp2
+  2: F7
+  3: F3
+  4: Fz
+  5: F4
+  6: F8
+  7: FC5
+  8: FC1
+  9: FC2
+  10: FC6
+  11: T7
+  12: C3
+  13: Cz
+  14: C4
+  15: T8
+  16: CP5
+  17: CP1
+  18: CP2
+  19: CP6
+  20: P7
+  21: P3
+  22: Pz
+  23: P4
+  24: P8
+  25: PO7
+  26: PO3
+  27: POz
+  28: PO4
+  29: PO8
+  30: O1
+  31: O2

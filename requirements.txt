@@ -1,0 +1,43 @@
+# BCI Speech Synthesis Dependencies
+# Tested on JetPack 6.x (Ubuntu 22.04, Python 3.10)
+
+# Core
+numpy>=1.24.0
+scipy>=1.11.0
+pyyaml>=6.0
+
+# Deep Learning
+torch>=2.1.0
+onnx>=1.14.0
+onnxruntime-gpu>=1.16.0
+
+# Signal Processing
+pylsl>=1.16.0              # Lab Streaming Layer
+
+# Speech Recognition
+faster-whisper>=0.9.0      # Whisper STT
+openai-whisper>=20231117   # Fallback
+
+# Text-to-Speech
+# kokoro-onnx              # Install from source
+piper-tts>=1.2.0           # Alternative TTS
+
+# Audio
+pyaudio>=0.2.13
+sounddevice>=0.4.6
+# pyalsaaudio              # ALSA bindings (install separately)
+
+# Hardware Interface
+spidev>=3.6                # SPI communication
+# RPi.GPIO                 # GPIO (install on Jetson separately)
+
+# Utilities
+tqdm>=4.66.0
+coloredlogs>=15.0
+
+# Development
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Optional: LLM Context (large download)
+# llama-cpp-python>=0.2.0
