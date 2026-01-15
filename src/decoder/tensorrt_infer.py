@@ -91,6 +91,7 @@ class TensorRTDecoder:
     def _allocate_buffers(self):
         """Allocate input/output buffers."""
         import pycuda.driver as cuda
+        import tensorrt as trt
 
         self._bindings = []
         self._inputs = []
@@ -102,9 +103,9 @@ class TensorRTDecoder:
             shape = self._engine.get_tensor_shape(name)
 
             # Convert to numpy dtype
-            if dtype == 1:  # trt.float32
+            if dtype == trt.DataType.FLOAT:
                 np_dtype = np.float32
-            elif dtype == 2:  # trt.float16
+            elif dtype == trt.DataType.HALF:
                 np_dtype = np.float16
             else:
                 np_dtype = np.float32
@@ -116,7 +117,8 @@ class TensorRTDecoder:
 
             self._bindings.append(int(device_mem))
 
-            if self._engine.get_tensor_mode(name) == 0:  # Input
+            # Check if input or output using TensorIOMode
+            if self._engine.get_tensor_mode(name) == trt.TensorIOMode.INPUT:
                 self._inputs.append({
                     'name': name,
                     'host': host_mem,

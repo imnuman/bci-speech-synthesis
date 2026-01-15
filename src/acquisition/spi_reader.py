@@ -179,6 +179,12 @@ class SPIReader:
         if self._running:
             return
 
+        # Open SPI device if not already open
+        if self.spi is None:
+            if not self.open():
+                print("Failed to open SPI device")
+                return
+
         self._callback = callback
         self._running = True
         self._thread = threading.Thread(target=self._acquisition_loop, daemon=True)
