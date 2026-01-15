@@ -79,7 +79,7 @@ class FeatureExtractor:
             idx = np.logical_and(freqs >= low, freqs <= high)
 
             # Integrate power in band
-            power = np.trapz(psd[idx], freqs[idx], axis=0)
+            power = np.trapezoid(psd[idx], freqs[idx], axis=0)
 
             if normalize:
                 power = np.log10(power + 1e-10)

@@ -10,11 +10,19 @@ import numpy as np
 from typing import Optional
 from pathlib import Path
 
-from acquisition import SPIReader, RingBuffer, LSLOutlet
-from processing import SignalProcessor, FeatureExtractor
-from decoder import TensorRTDecoder
-from context import WhisperSTT, ContextFusion
-from tts import KokoroTTS, ALSAOutput, get_response_text
+# Handle both relative and absolute imports
+try:
+    from .acquisition import SPIReader, RingBuffer, LSLOutlet
+    from .processing import SignalProcessor, FeatureExtractor
+    from .decoder import TensorRTDecoder
+    from .context import WhisperSTT, ContextFusion
+    from .tts import KokoroTTS, ALSAOutput, get_response_text
+except ImportError:
+    from acquisition import SPIReader, RingBuffer, LSLOutlet
+    from processing import SignalProcessor, FeatureExtractor
+    from decoder import TensorRTDecoder
+    from context import WhisperSTT, ContextFusion
+    from tts import KokoroTTS, ALSAOutput, get_response_text
 
 
 class BCIPipeline:
@@ -85,6 +93,9 @@ class BCIPipeline:
             channels=acq_cfg['channels'],
             sample_rate=acq_cfg['sample_rate']
         )
+        if not self.lsl_outlet.open():
+            print("    Warning: LSL outlet failed to open")
+            self.lsl_outlet = None
 
         # 4. Signal Processing
         print("  [4/7] Signal Processor...")
@@ -105,6 +116,11 @@ class BCIPipeline:
             engine_path=dec_cfg['model_path'],
             vocab=dec_cfg['vocab']
         )
+        if not self.decoder.load():
+            print("    Warning: TensorRT decoder using fallback mode")
+        else:
+            print("    Warming up decoder...")
+            self.decoder.warmup()
 
         # 6. Context Awareness
         if ctx_cfg['enabled']:
@@ -114,6 +130,8 @@ class BCIPipeline:
                 language=ctx_cfg['stt_language'],
                 device=ctx_cfg['stt_device']
             )
+            if not self.stt.load():
+                print("    Warning: Whisper STT using fallback mode")
             self.context_fusion = ContextFusion(
                 context_window_sec=ctx_cfg['context_window_sec'],
                 boost_factor=ctx_cfg['boost_factor']
@@ -128,14 +146,33 @@ class BCIPipeline:
             voice=tts_cfg['voice'],
             sample_rate=tts_cfg['sample_rate']
         )
+        if not self.tts.load():
+            print("    Warning: TTS using fallback mode")
+        
         self.audio_output = ALSAOutput(
             device=audio_cfg['device'],
             sample_rate=audio_cfg['sample_rate'],
             buffer_size=audio_cfg['buffer_size']
         )
+        if not self.audio_output.open():
+            print("    Warning: Audio output using fallback mode")
 
         print("Pipeline initialized!")
         return True
+
+    def cleanup(self):
+        """Clean up all resources."""
+        print("Cleaning up resources...")
+        
+        if self.spi_reader:
+            self.spi_reader.stop()
+            self.spi_reader.close()
+        
+        if self.lsl_outlet:
+            self.lsl_outlet.close()
+        
+        if self.audio_output:
+            self.audio_output.close()
 
     def run(self):
         """Run the main processing loop."""
@@ -223,7 +260,7 @@ class BCIPipeline:
             print("\nStopping...")
 
         finally:
-            self.spi_reader.stop()
+            self.cleanup()
             self._running = False
 
     def demo_mode(self):

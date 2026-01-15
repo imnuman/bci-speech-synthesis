@@ -93,8 +93,9 @@ class ALSAOutput:
             self._dummy_play(audio)
             return
 
-        # Convert to 16-bit PCM
-        audio_int16 = (audio * 32767).astype(np.int16)
+        # Clip and convert to 16-bit PCM
+        audio_clipped = np.clip(audio, -1.0, 1.0)
+        audio_int16 = (audio_clipped * 32767).astype(np.int16)
 
         # Write to device
         self._pcm.write(audio_int16.tobytes())
