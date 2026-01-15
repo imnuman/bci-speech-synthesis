@@ -154,6 +154,11 @@ class SPIReader:
 
         # Read raw bytes
         raw = self.spi.xfer2([0x00] * total_bytes)
+        
+        # Verify we got expected number of bytes
+        if len(raw) < total_bytes:
+            print(f"Warning: Expected {total_bytes} bytes, got {len(raw)}")
+            return np.zeros(self.channels)
 
         # Parse 24-bit samples
         samples = np.zeros(self.channels)
@@ -161,6 +166,9 @@ class SPIReader:
             offset = chip * bytes_per_chip + 3  # Skip status bytes
             for ch in range(8):
                 idx = offset + ch * 3
+                # Bounds check
+                if idx + 2 >= len(raw):
+                    break
                 # 24-bit signed integer (big-endian)
                 value = (raw[idx] << 16) | (raw[idx+1] << 8) | raw[idx+2]
                 if value & 0x800000:  # Sign extend

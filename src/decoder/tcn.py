@@ -167,7 +167,14 @@ class SpeechIntentDecoder(nn.Module):
         probs = self.model.predict(eeg_window)[0]
 
         confidence, idx = probs.max(dim=0)
-        intent = self.vocab[idx.item()]
+        idx_int = idx.item()
+        
+        # Safety check for vocab indexing
+        if idx_int >= len(self.vocab):
+            print(f"Warning: Invalid vocab index {idx_int}, using 0")
+            idx_int = 0
+            
+        intent = self.vocab[idx_int]
         prob_dict = {word: probs[i].item() for i, word in enumerate(self.vocab)}
 
         return intent, confidence.item(), prob_dict

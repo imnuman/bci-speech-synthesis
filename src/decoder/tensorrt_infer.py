@@ -191,6 +191,12 @@ class TensorRTDecoder:
 
         # Get prediction
         idx = np.argmax(probs)
+        
+        # Safety check for vocab indexing
+        if idx >= len(self.vocab):
+            print(f"Warning: Invalid vocab index {idx}, using 0")
+            idx = 0
+            
         intent = self.vocab[idx]
         confidence = probs[idx]
         prob_dict = {word: float(probs[i]) for i, word in enumerate(self.vocab)}

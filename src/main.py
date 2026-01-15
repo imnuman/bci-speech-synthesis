@@ -152,6 +152,20 @@ class BCIPipeline:
         print("Pipeline initialized!")
         return True
 
+    def cleanup(self):
+        """Clean up all resources."""
+        print("Cleaning up resources...")
+        
+        if self.spi_reader:
+            self.spi_reader.stop()
+            self.spi_reader.close()
+        
+        if self.lsl_outlet:
+            self.lsl_outlet.close()
+        
+        if self.audio_output:
+            self.audio_output.close()
+
     def run(self):
         """Run the main processing loop."""
         print("\nStarting BCI Pipeline...")
@@ -238,7 +252,7 @@ class BCIPipeline:
             print("\nStopping...")
 
         finally:
-            self.spi_reader.stop()
+            self.cleanup()
             self._running = False
 
     def demo_mode(self):
