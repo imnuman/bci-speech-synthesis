@@ -3,7 +3,10 @@
 import pytest
 import numpy as np
 import sys
-sys.path.insert(0, 'src')
+from pathlib import Path
+
+# Add src to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 
 class TestImportFixes:
