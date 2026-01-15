@@ -10,11 +10,19 @@ import numpy as np
 from typing import Optional
 from pathlib import Path
 
-from .acquisition import SPIReader, RingBuffer, LSLOutlet
-from .processing import SignalProcessor, FeatureExtractor
-from .decoder import TensorRTDecoder
-from .context import WhisperSTT, ContextFusion
-from .tts import KokoroTTS, ALSAOutput, get_response_text
+# Handle both relative and absolute imports
+try:
+    from .acquisition import SPIReader, RingBuffer, LSLOutlet
+    from .processing import SignalProcessor, FeatureExtractor
+    from .decoder import TensorRTDecoder
+    from .context import WhisperSTT, ContextFusion
+    from .tts import KokoroTTS, ALSAOutput, get_response_text
+except ImportError:
+    from acquisition import SPIReader, RingBuffer, LSLOutlet
+    from processing import SignalProcessor, FeatureExtractor
+    from decoder import TensorRTDecoder
+    from context import WhisperSTT, ContextFusion
+    from tts import KokoroTTS, ALSAOutput, get_response_text
 
 
 class BCIPipeline:
